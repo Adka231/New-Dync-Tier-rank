@@ -10,6 +10,9 @@
         body { background-color: #0b1120; font-family: 'Inter', sans-serif; color: #f8fafc; padding-bottom: 40px; overflow-x: hidden; }
         .font-heavy { font-weight: 900; font-style: italic; text-transform: uppercase; }
         
+        /* Font Inter Khusus Nama */
+        .player-name { font-family: 'Inter', sans-serif; font-weight: 800; }
+
         .tab-item { transition: 0.2s; white-space: nowrap; flex-shrink: 0; cursor: pointer; border-bottom: 2px solid transparent; }
         .tab-item.active { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-bottom: 2px solid #3b82f6; }
         .tab-bar::-webkit-scrollbar { display: none; }
@@ -27,13 +30,13 @@
         .mctiers-card { background: #151c2e; border-radius: 12px; margin-bottom: 12px; border: 1px solid #1e293b; overflow: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
         .mctiers-card:hover { border-color: #3b82f6; transform: translateY(-2px); }
 
-        /* Tiers Singkatan Style - SEKARANG BULAT */
+        /* Ikon Lingkaran Kita Sendiri */
         .tier-wrapper { display: flex; flex-direction: column; align-items: center; width: 48px; flex-shrink: 0; }
         .tier-abbr-box { 
-            width: 42px; height: 42px; border-radius: 9999px; /* Membuat lingkaran sempurna */
+            width: 42px; height: 42px; border-radius: 9999px; 
             background: #0f172a; border: 2.5px solid; 
             display: flex; align-items: center; justify-content: center; 
-            margin-bottom: -11px; font-size: 14px; font-weight: 900;
+            margin-bottom: -11px; font-size: 13px; font-weight: 900;
         }
         .tier-box { 
             width: 40px; height: 21px; border-radius: 4px; border: 1.5px solid;
@@ -47,9 +50,10 @@
         .t4-theme .tier-abbr-box { border-color: #475569; color: #475569; } .t4-theme .tier-box { background: #1e293b; border-color: #475569; }
         .t5-theme .tier-abbr-box { border-color: #334155; color: #334155; } .t5-theme .tier-box { background: #0f172a; border-color: #334155; }
 
-        #profileModal { display: none; position: fixed; inset: 0; z-index: 100; backdrop-filter: blur(12px); align-items: center; justify-content: center; padding: 20px; background: rgba(0,0,0,0.8); }
-        .modal-box { background: #0f172a; border: 1px solid #1e293b; border-radius: 32px; animation: slideUp 0.3s ease-out; }
-        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        /* Profil Modal ala mctiers.com */
+        #profileModal { display: none; position: fixed; inset: 0; z-index: 100; backdrop-filter: blur(15px); align-items: center; justify-content: center; padding: 20px; background: rgba(0,0,0,0.85); }
+        .modal-box { background: #0f172a; border: 1px solid #1e293b; border-radius: 24px; animation: slideUp 0.3s ease-out; overflow: hidden; }
+        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -74,10 +78,11 @@
     </div>
 
     <div id="profileModal" onclick="closeProfile()">
-        <div class="modal-box w-full max-w-sm p-8 relative" onclick="event.stopPropagation()">
-            <button onclick="closeProfile()" class="absolute top-6 right-8 text-gray-500 hover:text-white">✕</button>
+        <div class="modal-box w-full max-w-sm relative shadow-2xl" onclick="event.stopPropagation()">
             <div id="modalBody"></div>
-            <button onclick="closeProfile()" class="w-full mt-8 py-3 bg-gray-800 hover:bg-gray-700 rounded-xl text-xs font-bold uppercase tracking-widest text-gray-400">← Kembali</button>
+            <div class="p-6 bg-[#0b1120]">
+                <button onclick="closeProfile()" class="w-full py-3 bg-gray-800 hover:bg-gray-700 rounded-xl text-xs font-bold uppercase tracking-widest text-gray-400 transition">Tutup Profil</button>
+            </div>
         </div>
     </div>
 
@@ -95,7 +100,7 @@
             diapot: "DP", nethpot: "NP", axe: "AX", uhc: "UHC"
         };
 
-        // DATA PLAYER LENGKAP (Ganti data di sini saja lewat GitHub)
+        // DAFTAR PLAYER (Urutan akan otomatis di-sortir berdasarkan poin)
         const players = [
             { id: 1, name: "X1an_", title: "Combat Grandmaster", region: "AS", pfp: "https://i.postimg.cc/fT79Sq90/custom-ava-(7).png", tiers: { sword: "HT3", crystal: "LT3", mace: "HT4", smp: "HT3", diapot: "HT4", nethpot: "HT4", axe: "LT3", uhc: "LT3" } },
             { id: 2, name: "coldified", title: "Sword Legend", region: "EU", pfp: "https://i.pinimg.com/736x/21/f0/26/21f026364f89d38977c012879572797e.jpg", tiers: { sword: "HT2", smp: "HT1", mace: "LT1" } },
@@ -147,7 +152,7 @@
                         <img src="${p.pfp}" class="w-12 h-12 rounded-full border-2 border-[#0b1120] object-cover -ml-4 z-10" onerror="this.src='https://i.imgur.com/8pw9fS0.png'">
                         <div class="ml-4 flex-1 pr-3">
                             <div class="flex justify-between items-center mb-0.5">
-                                <h3 class="font-bold text-lg leading-tight truncate w-32">${p.name}</h3>
+                                <h3 class="player-name text-lg leading-tight truncate w-32">${p.name}</h3>
                                 <div class="flex gap-2 items-center">
                                     <span class="text-[10px] font-black text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">${p.computedPts} PTS</span>
                                     <span class="bg-red-900/20 text-red-500 text-[9px] font-black px-2 py-0.5 rounded uppercase">${p.region}</span>
@@ -174,28 +179,30 @@
             const modalBody = document.getElementById('modalBody');
             const tiersDetail = Object.entries(p.tiers).map(([mode, tier]) => {
                 const level = tier.replace(/\D/g, '');
-                return `<div class="bg-white/5 p-3 rounded-xl flex flex-col items-center border border-white/5 t${level}-theme min-w-[70px]">
+                return `<div class="bg-white/5 p-3 rounded-xl flex flex-col items-center border border-white/5 t${level}-theme">
                     <div class="tier-abbr-box scale-75 mb-[-5px]">${abbreviations[mode]}</div>
                     <span class="text-[10px] font-heavy text-white">${tier}</span>
-                    <span class="text-[8px] text-gray-500 font-black uppercase tracking-widest">${mode}</span>
+                    <span class="text-[8px] text-gray-500 font-black uppercase tracking-widest mt-1">${mode}</span>
                 </div>`;
             }).join('');
 
             modalBody.innerHTML = `
-                <div class="text-center">
-                    <img src="${p.pfp}" class="w-24 h-24 rounded-full mx-auto border-4 border-blue-500 object-cover mb-4">
-                    <h2 class="text-3xl font-heavy italic mb-1">${p.name}</h2>
-                    <p class="text-yellow-500 font-bold italic mb-6 text-sm">◆ ${p.title} ◆</p>
-                    <div class="text-left mb-6">
-                        <p class="text-[9px] font-black text-gray-500 mb-2 uppercase tracking-widest">LEADERBOARD SCORE</p>
-                        <div class="bg-gray-800/40 p-4 rounded-xl flex justify-between items-center border border-white/5">
-                            <span class="text-xs font-bold text-gray-300 italic">Total Points</span>
-                            <span class="text-2xl font-heavy text-blue-400">${p.computedPts}</span>
+                <div class="bg-gradient-to-b from-blue-900/20 to-[#0f172a] p-8 text-center border-b border-gray-800">
+                    <img src="${p.pfp}" class="w-24 h-24 rounded-full mx-auto border-4 border-blue-500 shadow-2xl object-cover mb-4">
+                    <h2 class="player-name text-3xl italic mb-1">${p.name}</h2>
+                    <p class="text-yellow-500 font-bold italic text-sm">◆ ${p.title} ◆</p>
+                </div>
+                <div class="p-6">
+                    <div class="mb-6">
+                        <p class="text-[9px] font-black text-gray-500 mb-3 uppercase tracking-[0.2em]">STATISTIK LEADERBOARD</p>
+                        <div class="bg-blue-500/5 border border-blue-500/20 p-4 rounded-2xl flex justify-between items-center">
+                            <span class="text-xs font-semibold text-gray-300">Total Competitive Score</span>
+                            <span class="text-2xl font-black text-blue-400">${p.computedPts}</span>
                         </div>
                     </div>
-                    <div class="text-left">
-                        <p class="text-[9px] font-black text-gray-500 mb-2 uppercase tracking-widest">GAMEMODE TIERS</p>
-                        <div class="grid grid-cols-4 gap-2.5">${tiersDetail}</div>
+                    <div>
+                        <p class="text-[9px] font-black text-gray-500 mb-3 uppercase tracking-[0.2em]">GAMEMODE TIERS</p>
+                        <div class="grid grid-cols-4 gap-3">${tiersDetail}</div>
                     </div>
                 </div>`;
             document.getElementById('profileModal').style.display = 'flex';
