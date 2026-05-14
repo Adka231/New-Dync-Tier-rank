@@ -3,19 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MCTIERS - Auto-Points & SVG Icons</title>
+    <title>MCTIERS - Auto Sort Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { background-color: #0b1120; font-family: 'Inter', sans-serif; color: #f8fafc; padding-bottom: 80px; overflow-x: hidden; }
         .font-heavy { font-weight: 900; font-style: italic; text-transform: uppercase; }
         
-        /* GUI Menu Tabs */
         .tab-item { transition: 0.2s; white-space: nowrap; flex-shrink: 0; cursor: pointer; border-bottom: 2px solid transparent; }
         .tab-item.active { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-bottom: 2px solid #3b82f6; }
         .tab-bar::-webkit-scrollbar { display: none; }
 
-        /* Rank Slant */
         .rank-slant { 
             background: #2d3748; width: 75px; height: 65px; 
             clip-path: polygon(0 0, 100% 0, 75% 100%, 0% 100%);
@@ -29,26 +27,25 @@
         .mctiers-card { background: #151c2e; border-radius: 12px; margin-bottom: 12px; border: 1px solid #1e293b; overflow: hidden; transition: 0.2s; cursor: pointer; }
         .mctiers-card:hover { border-color: #3b82f6; transform: scale(1.01); }
 
-        /* Tier Ikon Style */
+        /* Tiers Singkatan Style */
         .tier-wrapper { display: flex; flex-direction: column; align-items: center; width: 48px; flex-shrink: 0; }
-        .tier-circle { 
-            width: 42px; height: 42px; border-radius: 50%; 
+        .tier-abbr-box { 
+            width: 42px; height: 42px; border-radius: 8px; 
             background: #0f172a; border: 2.5px solid; 
-            display: flex; align-items: center; justify-content: center; margin-bottom: -11px;
+            display: flex; align-items: center; justify-content: center; 
+            margin-bottom: -11px; font-size: 14px; font-weight: 900;
         }
-        .tier-circle svg { width: 24px; height: 24px; fill: currentColor; }
         .tier-box { 
             width: 40px; height: 21px; border-radius: 4px; border: 1.5px solid;
             display: flex; align-items: center; justify-content: center;
             font-size: 10px; font-weight: 900; color: white; z-index: 10;
         }
 
-        /* Themes */
-        .t1-theme .tier-circle { border-color: #fbbf24; color: #fbbf24; } .t1-theme .tier-box { background: #d97706; border-color: #fbbf24; }
-        .t2-theme .tier-circle { border-color: #94a3b8; color: #94a3b8; } .t2-theme .tier-box { background: #475569; border-color: #94a3b8; }
-        .t3-theme .tier-circle { border-color: #f97316; color: #f97316; } .t3-theme .tier-box { background: #c2410c; border-color: #f97316; }
-        .t4-theme .tier-circle { border-color: #475569; color: #475569; } .t4-theme .tier-box { background: #1e293b; border-color: #475569; }
-        .t5-theme .tier-circle { border-color: #334155; color: #334155; } .t5-theme .tier-box { background: #0f172a; border-color: #334155; }
+        .t1-theme .tier-abbr-box { border-color: #fbbf24; color: #fbbf24; } .t1-theme .tier-box { background: #d97706; border-color: #fbbf24; }
+        .t2-theme .tier-abbr-box { border-color: #94a3b8; color: #94a3b8; } .t2-theme .tier-box { background: #475569; border-color: #94a3b8; }
+        .t3-theme .tier-abbr-box { border-color: #f97316; color: #f97316; } .t3-theme .tier-box { background: #c2410c; border-color: #f97316; }
+        .t4-theme .tier-abbr-box { border-color: #475569; color: #475569; } .t4-theme .tier-box { background: #1e293b; border-color: #475569; }
+        .t5-theme .tier-abbr-box { border-color: #334155; color: #334155; } .t5-theme .tier-box { background: #0f172a; border-color: #334155; }
 
         #profileModal, #adminPanel { display: none; position: fixed; inset: 0; z-index: 100; backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 20px; }
         #profileModal { background: rgba(0,0,0,0.9); }
@@ -62,9 +59,8 @@
 <body class="p-4">
 
     <div class="max-w-md mx-auto">
-        <h1 id="mainTitle" class="text-2xl font-heavy italic mb-4 cursor-pointer select-none tracking-tighter">MCTIERS</h1>
+        <h1 class="text-2xl font-heavy italic mb-4 tracking-tighter">MCTIERS</h1>
 
-        <!-- Menu Tab -->
         <div class="tab-bar flex overflow-x-auto gap-2 mb-6 no-scrollbar pb-1 border-b border-gray-800">
             <div class="tab-item active px-4 py-2 rounded-lg text-sm font-bold" onclick="filterBy('overall', this)">🏆 Overall</div>
             <div class="tab-item px-4 py-2 rounded-lg text-sm font-bold" onclick="filterBy('sword', this)">Sword</div>
@@ -80,7 +76,6 @@
         <div id="playerContainer"></div>
     </div>
 
-    <!-- Profile Modal -->
     <div id="profileModal" onclick="closeProfile()">
         <div class="modal-box w-full max-w-sm p-8 relative" onclick="event.stopPropagation()">
             <button onclick="closeProfile()" class="absolute top-6 right-8 text-gray-500 hover:text-white">✕</button>
@@ -89,10 +84,8 @@
         </div>
     </div>
 
-    <!-- Admin Button -->
-    <button id="editBtn" onclick="openAdmin()" class="hidden fixed bottom-6 right-6 bg-blue-600 text-white px-5 py-3 rounded-full shadow-xl font-bold text-xs uppercase z-50">Admin Mode</button>
+    <button id="editBtn" onclick="openAdmin()" class="fixed bottom-6 right-6 bg-blue-600 text-white px-5 py-3 rounded-full shadow-xl font-bold text-xs uppercase z-50">Admin Mode</button>
 
-    <!-- Admin Panel -->
     <div id="adminPanel">
         <div class="max-w-md mx-auto w-full">
             <div class="flex justify-between items-center mb-6">
@@ -101,57 +94,47 @@
             </div>
             <textarea id="jsonInput" class="w-full h-[450px] bg-gray-900 text-green-400 font-mono text-[10px] p-4 rounded-xl border border-gray-700 outline-none mb-4 no-scrollbar"></textarea>
             <button onclick="saveChanges()" class="w-full bg-blue-600 py-4 rounded-xl font-bold uppercase mb-2">Simpan Perubahan</button>
-            <p class="text-[10px] text-gray-400 text-center uppercase">Poin akan dihitung otomatis oleh sistem.</p>
+            <p class="text-[10px] text-gray-400 text-center uppercase">Peringkat akan otomatis di-sortir setelah simpan.</p>
         </div>
     </div>
 
     <script>
-        const ADMIN_PASSWORD = "admin123";
-        let clickCount = 0;
         let currentFilter = 'overall';
 
-        // Aturan Poin Kamu
         const POINT_VALUES = {
             'HT1': 65, 'LT1': 50, 'HT2': 40, 'LT2': 35,
             'HT3': 20, 'LT3': 15, 'HT4': 10, 'LT4': 5,
             'HT5': 3, 'LT5': 1
         };
 
-        // Ikon SVG Manual (Tanpa perlu internet untuk gambar)
-        const svgs = {
-            sword: `<svg viewBox="0 0 24 24"><path d="M19.5,2L17,4.5L13,8.5L11.5,7L9.5,9L11,10.5L3,18.5L5.5,21L13.5,13L15,14.5L17,12.5L15.5,11L19.5,7L22,4.5L19.5,2Z"/></svg>`,
-            crystal: `<svg viewBox="0 0 24 24"><path d="M12,2L4.5,12L12,22L19.5,12L12,2Z"/></svg>`,
-            mace: `<svg viewBox="0 0 24 24"><path d="M9,2H15V8H9V2M11,10H13V22H11V10Z"/></svg>`,
-            smp: `<svg viewBox="0 0 24 24"><path d="M4,4H20V20H4V4M6,6V18H18V6H6M8,8H16V16H8V8Z"/></svg>`,
-            diapot: `<svg viewBox="0 0 24 24"><path d="M10,2V5H7V7H17V5H14V2H10M7,8V21A1,1 0 0,0 8,22H16A1,1 0 0,0 17,21V8H7Z" fill="#3b82f6"/></svg>`,
-            nethpot: `<svg viewBox="0 0 24 24"><path d="M10,2V5H7V7H17V5H14V2H10M7,8V21A1,1 0 0,0 8,22H16A1,1 0 0,0 17,21V8H7Z" fill="#ef4444"/></svg>`,
-            axe: `<svg viewBox="0 0 24 24"><path d="M14,2H18V6H14V2M10,2H13V10H10V2M10,12H13V22H10V12Z"/></svg>`,
-            uhc: `<svg viewBox="0 0 24 24"><path d="M12,2C10.89,2 10,2.89 10,4C10,5.11 10.89,6 12,6C13.11,6 14,5.11 14,4C14,2.89 13.11,2 12,2M12,8C7,8 3,11 3,11V18C3,19.11 3.9,20 5,20H19C20.11,20 21,19.11 21,18V11C21,11 17,8 12,8Z"/></svg>`
+        const abbreviations = {
+            sword: "SW",
+            crystal: "CR",
+            mace: "ME",
+            smp: "SM",
+            diapot: "DP",
+            nethpot: "NP",
+            axe: "AX",
+            uhc: "UHC"
         };
 
         const defaultPlayers = [
-            { id: 1, name: "X1an_", title: "Combat Grandmaster", region: "AS", pfp: "https://i.postimg.cc/7G76yCM9/custom-ava-6.png", tiers: { sword: "HT3", crystal: "LT3", mace: "HT4", smp: "HT3", diapot: "HT4", nethpot: "HT4", axe: "LT3", uhc: "LT3" } },
-            { id: 2, name: "coldified", title: "Sword Legend", region: "EU", pfp: "https://i.pinimg.com/736x/21/f0/26/21f026364f89d38977c012879572797e.jpg", tiers: { sword: "HT2", smp: "HT1", mace: "LT1" } },
-            { id: 3, name: "Shadow", title: "Crystal Elite", region: "NA", pfp: "https://i.pravatar.cc/150?u=1", tiers: { nethpot: "HT3", crystal: "LT1", diapot: "LT2" } },
-            { id: 4, name: "Vortex", title: "Versatile Duelist", region: "SEA", pfp: "https://i.pravatar.cc/150?u=2", tiers: { sword: "HT3", axe: "HT4", smp: "LT2" } },
-            { id: 5, name: "Dante", title: "Mace Specialist", region: "EU", pfp: "https://i.pravatar.cc/150?u=3", tiers: { crystal: "HT2", mace: "LT2", uhc: "HT4" } },
-            { id: 6, name: "Nifty", title: "Survival Pro", region: "NA", pfp: "https://i.pravatar.cc/150?u=4", tiers: { smp: "HT3", uhc: "LT1", diapot: "HT4" } },
-            { id: 7, name: "Luv", title: "Rising Star", region: "SEA", pfp: "https://i.pravatar.cc/150?u=5", tiers: { sword: "LT1", nethpot: "HT4", axe: "LT2" } }
+            { id: 1, name: "X1an_", title: "Combat Grandmaster", region: "AS", pfp: "https://i.postimg.cc/fT79Sq90/custom-ava-(7).png", tiers: { sword: "HT3", crystal: "LT3", mace: "HT4", smp: "HT3", diapot: "HT4", nethpot: "HT4", axe: "LT3", uhc: "LT3" } },
+            { id: 2, name: "coldified", title: "Sword Legend", region: "EU", pfp: "https://i.pinimg.com/736x/21/f0/26/21f026364f89d38977c012879572797e.jpg", tiers: { sword: "HT2", smp: "HT1", mace: "LT1" } }
         ];
 
-        let players = JSON.parse(localStorage.getItem('mctiers_v6_auto')) || defaultPlayers;
+        let players = JSON.parse(localStorage.getItem('mctiers_v9_sort')) || defaultPlayers;
 
-        // FUNGSI HITUNG POIN OTOMATIS
         function calculatePoints(tierList) {
             return Object.values(tierList).reduce((acc, tier) => acc + (POINT_VALUES[tier] || 0), 0);
         }
 
         function getTierIconHtml(mode, tier) {
             const level = tier.replace(/\D/g, '');
-            const svgContent = svgs[mode] || `<text y="15" x="5" font-size="12">?</text>`;
+            const abbr = abbreviations[mode] || "??";
             return `
             <div class="tier-wrapper t${level}-theme">
-                <div class="tier-circle">${svgContent}</div>
+                <div class="tier-abbr-box">${abbr}</div>
                 <div class="tier-box">${tier}</div>
             </div>`;
         }
@@ -160,11 +143,11 @@
             const container = document.getElementById('playerContainer');
             container.innerHTML = '';
             
-            // Hitung poin dan sortir
+            // Auto calculate and sort
             players.forEach(p => p.computedPts = calculatePoints(p.tiers));
-            let sorted = [...players].sort((a, b) => b.computedPts - a.computedPts);
+            players.sort((a, b) => b.computedPts - a.computedPts);
 
-            sorted.forEach((p, index) => {
+            players.forEach((p, index) => {
                 const rank = index + 1;
                 const rankClass = rank <= 3 ? `rank-${rank}` : 'rank-other';
                 
@@ -173,7 +156,7 @@
                     tiersHtml = Object.entries(p.tiers).map(([mode, tier]) => getTierIconHtml(mode, tier)).join('');
                 } else if (p.tiers[currentFilter]) {
                     tiersHtml = getTierIconHtml(currentFilter, p.tiers[currentFilter]);
-                } else { return; } // Skip if doesn't have the filtered tier
+                } else { return; }
 
                 const card = document.createElement('div');
                 card.className = 'mctiers-card';
@@ -212,7 +195,7 @@
             const tiersDetail = Object.entries(p.tiers).map(([mode, tier]) => {
                 const level = tier.replace(/\D/g, '');
                 return `<div class="bg-white/5 p-3 rounded-xl flex flex-col items-center border border-white/5 t${level}-theme min-w-[70px]">
-                    <div class="tier-circle scale-75 mb-[-5px]">${svgs[mode]}</div>
+                    <div class="tier-abbr-box scale-75 mb-[-5px]">${abbreviations[mode]}</div>
                     <span class="text-[10px] font-heavy text-white">${tier}</span>
                     <span class="text-[8px] text-gray-500 font-black uppercase tracking-widest">${mode}</span>
                 </div>`;
@@ -224,9 +207,9 @@
                     <h2 class="text-3xl font-heavy italic mb-1">${p.name}</h2>
                     <p class="text-yellow-500 font-bold italic mb-6 text-sm">◆ ${p.title} ◆</p>
                     <div class="text-left mb-6">
-                        <p class="text-[9px] font-black text-gray-500 mb-2 uppercase tracking-widest">RANK POSISI</p>
+                        <p class="text-[9px] font-black text-gray-500 mb-2 uppercase tracking-widest">LEADERBOARD POINTS</p>
                         <div class="bg-gray-800/40 p-4 rounded-xl flex justify-between items-center border border-white/5">
-                            <span class="text-xs font-bold text-gray-300 italic italic">Leaderboard Points</span>
+                            <span class="text-xs font-bold text-gray-300 italic italic">Total Score</span>
                             <span class="text-2xl font-heavy text-blue-400">${p.computedPts}</span>
                         </div>
                     </div>
@@ -240,26 +223,22 @@
 
         function closeProfile() { document.getElementById('profileModal').style.display = 'none'; }
 
-        document.getElementById('mainTitle').onclick = () => {
-            clickCount++;
-            if(clickCount === 5) { document.getElementById('editBtn').classList.remove('hidden'); clickCount = 0; }
-        };
-
         function openAdmin() {
-            const pass = prompt("Password Admin:");
-            if(pass === ADMIN_PASSWORD) {
-                document.getElementById('jsonInput').value = JSON.stringify(players, null, 4);
-                document.getElementById('adminPanel').style.display = 'flex';
-            }
+            document.getElementById('jsonInput').value = JSON.stringify(players, null, 4);
+            document.getElementById('adminPanel').style.display = 'flex';
         }
 
         function saveChanges() {
             try {
                 players = JSON.parse(document.getElementById('jsonInput').value);
-                localStorage.setItem('mctiers_v6_auto', JSON.stringify(players));
+                // Force sort after editing
+                players.forEach(p => p.computedPts = calculatePoints(p.tiers));
+                players.sort((a, b) => b.computedPts - a.computedPts);
+                
+                localStorage.setItem('mctiers_v9_sort', JSON.stringify(players));
                 renderList();
                 document.getElementById('adminPanel').style.display = 'none';
-            } catch (e) { alert("JSON Error!"); }
+            } catch (e) { alert("JSON Error! Periksa kembali format data."); }
         }
 
         renderList();
