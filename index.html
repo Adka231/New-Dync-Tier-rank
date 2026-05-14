@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MCTIERS - Auto Sort Edition</title>
+    <title>MCTIERS - Professional Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0b1120; font-family: 'Inter', sans-serif; color: #f8fafc; padding-bottom: 80px; overflow-x: hidden; }
+        body { background-color: #0b1120; font-family: 'Inter', sans-serif; color: #f8fafc; padding-bottom: 40px; overflow-x: hidden; }
         .font-heavy { font-weight: 900; font-style: italic; text-transform: uppercase; }
         
         .tab-item { transition: 0.2s; white-space: nowrap; flex-shrink: 0; cursor: pointer; border-bottom: 2px solid transparent; }
@@ -24,13 +24,13 @@
         .rank-3 { background: linear-gradient(135deg, #cd7f32, #a0522d); color: #fff; }
         .rank-other { background: #1e293b; color: #64748b; }
 
-        .mctiers-card { background: #151c2e; border-radius: 12px; margin-bottom: 12px; border: 1px solid #1e293b; overflow: hidden; transition: 0.2s; cursor: pointer; }
-        .mctiers-card:hover { border-color: #3b82f6; transform: scale(1.01); }
+        .mctiers-card { background: #151c2e; border-radius: 12px; margin-bottom: 12px; border: 1px solid #1e293b; overflow: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .mctiers-card:hover { border-color: #3b82f6; transform: translateY(-2px); }
 
-        /* Tiers Singkatan Style */
+        /* Tiers Singkatan Style - SEKARANG BULAT */
         .tier-wrapper { display: flex; flex-direction: column; align-items: center; width: 48px; flex-shrink: 0; }
         .tier-abbr-box { 
-            width: 42px; height: 42px; border-radius: 8px; 
+            width: 42px; height: 42px; border-radius: 9999px; /* Membuat lingkaran sempurna */
             background: #0f172a; border: 2.5px solid; 
             display: flex; align-items: center; justify-content: center; 
             margin-bottom: -11px; font-size: 14px; font-weight: 900;
@@ -47,12 +47,9 @@
         .t4-theme .tier-abbr-box { border-color: #475569; color: #475569; } .t4-theme .tier-box { background: #1e293b; border-color: #475569; }
         .t5-theme .tier-abbr-box { border-color: #334155; color: #334155; } .t5-theme .tier-box { background: #0f172a; border-color: #334155; }
 
-        #profileModal, #adminPanel { display: none; position: fixed; inset: 0; z-index: 100; backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 20px; }
-        #profileModal { background: rgba(0,0,0,0.9); }
-        #adminPanel { background: #0b1120; z-index: 200; overflow-y: auto; display: none; flex-direction: column; align-items: flex-start; justify-content: flex-start; }
-        
+        #profileModal { display: none; position: fixed; inset: 0; z-index: 100; backdrop-filter: blur(12px); align-items: center; justify-content: center; padding: 20px; background: rgba(0,0,0,0.8); }
         .modal-box { background: #0f172a; border: 1px solid #1e293b; border-radius: 32px; animation: slideUp 0.3s ease-out; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -84,20 +81,6 @@
         </div>
     </div>
 
-    <button id="editBtn" onclick="openAdmin()" class="fixed bottom-6 right-6 bg-blue-600 text-white px-5 py-3 rounded-full shadow-xl font-bold text-xs uppercase z-50">Admin Mode</button>
-
-    <div id="adminPanel">
-        <div class="max-w-md mx-auto w-full">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-heavy text-blue-400">Admin Editor</h2>
-                <button onclick="document.getElementById('adminPanel').style.display='none'" class="text-gray-500">✕</button>
-            </div>
-            <textarea id="jsonInput" class="w-full h-[450px] bg-gray-900 text-green-400 font-mono text-[10px] p-4 rounded-xl border border-gray-700 outline-none mb-4 no-scrollbar"></textarea>
-            <button onclick="saveChanges()" class="w-full bg-blue-600 py-4 rounded-xl font-bold uppercase mb-2">Simpan Perubahan</button>
-            <p class="text-[10px] text-gray-400 text-center uppercase">Peringkat akan otomatis di-sortir setelah simpan.</p>
-        </div>
-    </div>
-
     <script>
         let currentFilter = 'overall';
 
@@ -108,22 +91,20 @@
         };
 
         const abbreviations = {
-            sword: "SW",
-            crystal: "CR",
-            mace: "ME",
-            smp: "SM",
-            diapot: "DP",
-            nethpot: "NP",
-            axe: "AX",
-            uhc: "UHC"
+            sword: "SW", crystal: "CR", mace: "ME", smp: "SM",
+            diapot: "DP", nethpot: "NP", axe: "AX", uhc: "UHC"
         };
 
-        const defaultPlayers = [
+        // DATA PLAYER LENGKAP (Ganti data di sini saja lewat GitHub)
+        const players = [
             { id: 1, name: "X1an_", title: "Combat Grandmaster", region: "AS", pfp: "https://i.postimg.cc/fT79Sq90/custom-ava-(7).png", tiers: { sword: "HT3", crystal: "LT3", mace: "HT4", smp: "HT3", diapot: "HT4", nethpot: "HT4", axe: "LT3", uhc: "LT3" } },
-            { id: 2, name: "coldified", title: "Sword Legend", region: "EU", pfp: "https://i.pinimg.com/736x/21/f0/26/21f026364f89d38977c012879572797e.jpg", tiers: { sword: "HT2", smp: "HT1", mace: "LT1" } }
+            { id: 2, name: "coldified", title: "Sword Legend", region: "EU", pfp: "https://i.pinimg.com/736x/21/f0/26/21f026364f89d38977c012879572797e.jpg", tiers: { sword: "HT2", smp: "HT1", mace: "LT1" } },
+            { id: 3, name: "Shadow", title: "Crystal Elite", region: "NA", pfp: "https://i.pravatar.cc/150?u=1", tiers: { nethpot: "HT3", crystal: "LT1", diapot: "LT2" } },
+            { id: 4, name: "Vortex", title: "Versatile Duelist", region: "SEA", pfp: "https://i.pravatar.cc/150?u=2", tiers: { sword: "HT3", axe: "HT4", smp: "LT2" } },
+            { id: 5, name: "Dante", title: "Mace Specialist", region: "EU", pfp: "https://i.pravatar.cc/150?u=3", tiers: { crystal: "HT2", mace: "LT2", uhc: "HT4" } },
+            { id: 6, name: "Nifty", title: "Survival Pro", region: "NA", pfp: "https://i.pravatar.cc/150?u=4", tiers: { smp: "HT3", uhc: "LT1", diapot: "HT4" } },
+            { id: 7, name: "Luv", title: "Rising Star", region: "SEA", pfp: "https://i.pravatar.cc/150?u=5", tiers: { sword: "LT1", nethpot: "HT4", axe: "LT2" } }
         ];
-
-        let players = JSON.parse(localStorage.getItem('mctiers_v9_sort')) || defaultPlayers;
 
         function calculatePoints(tierList) {
             return Object.values(tierList).reduce((acc, tier) => acc + (POINT_VALUES[tier] || 0), 0);
@@ -143,7 +124,6 @@
             const container = document.getElementById('playerContainer');
             container.innerHTML = '';
             
-            // Auto calculate and sort
             players.forEach(p => p.computedPts = calculatePoints(p.tiers));
             players.sort((a, b) => b.computedPts - a.computedPts);
 
@@ -207,9 +187,9 @@
                     <h2 class="text-3xl font-heavy italic mb-1">${p.name}</h2>
                     <p class="text-yellow-500 font-bold italic mb-6 text-sm">◆ ${p.title} ◆</p>
                     <div class="text-left mb-6">
-                        <p class="text-[9px] font-black text-gray-500 mb-2 uppercase tracking-widest">LEADERBOARD POINTS</p>
+                        <p class="text-[9px] font-black text-gray-500 mb-2 uppercase tracking-widest">LEADERBOARD SCORE</p>
                         <div class="bg-gray-800/40 p-4 rounded-xl flex justify-between items-center border border-white/5">
-                            <span class="text-xs font-bold text-gray-300 italic italic">Total Score</span>
+                            <span class="text-xs font-bold text-gray-300 italic">Total Points</span>
                             <span class="text-2xl font-heavy text-blue-400">${p.computedPts}</span>
                         </div>
                     </div>
@@ -222,24 +202,6 @@
         }
 
         function closeProfile() { document.getElementById('profileModal').style.display = 'none'; }
-
-        function openAdmin() {
-            document.getElementById('jsonInput').value = JSON.stringify(players, null, 4);
-            document.getElementById('adminPanel').style.display = 'flex';
-        }
-
-        function saveChanges() {
-            try {
-                players = JSON.parse(document.getElementById('jsonInput').value);
-                // Force sort after editing
-                players.forEach(p => p.computedPts = calculatePoints(p.tiers));
-                players.sort((a, b) => b.computedPts - a.computedPts);
-                
-                localStorage.setItem('mctiers_v9_sort', JSON.stringify(players));
-                renderList();
-                document.getElementById('adminPanel').style.display = 'none';
-            } catch (e) { alert("JSON Error! Periksa kembali format data."); }
-        }
 
         renderList();
     </script>
