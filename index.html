@@ -10,27 +10,24 @@
         body { background-color: #0b1120; font-family: 'Inter', sans-serif; color: #f8fafc; padding-bottom: 40px; overflow-x: hidden; }
         .font-heavy { font-weight: 900; font-style: italic; text-transform: uppercase; }
         
-        /* Font Inter Khusus Nama */
-        .player-name { font-family: 'Inter', sans-serif; font-weight: 800; }
-
         .tab-item { transition: 0.2s; white-space: nowrap; flex-shrink: 0; cursor: pointer; border-bottom: 2px solid transparent; }
         .tab-item.active { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-bottom: 2px solid #3b82f6; }
         .tab-bar::-webkit-scrollbar { display: none; }
 
+        /* Rank Slant Dashboard */
         .rank-slant { 
             background: #2d3748; width: 75px; height: 65px; 
             clip-path: polygon(0 0, 100% 0, 75% 100%, 0% 100%);
             display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
-        .rank-1 { background: linear-gradient(135deg, #fbbf24, #d97706); color: #000; box-shadow: 0 0 15px rgba(251, 191, 36, 0.3); }
+        .rank-1 { background: linear-gradient(135deg, #fbbf24, #d97706); color: #000; }
         .rank-2 { background: linear-gradient(135deg, #cbd5e1, #94a3b8); color: #000; }
         .rank-3 { background: linear-gradient(135deg, #cd7f32, #a0522d); color: #fff; }
         .rank-other { background: #1e293b; color: #64748b; }
 
         .mctiers-card { background: #151c2e; border-radius: 12px; margin-bottom: 12px; border: 1px solid #1e293b; overflow: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
-        .mctiers-card:hover { border-color: #3b82f6; transform: translateY(-2px); }
 
-        /* Ikon Lingkaran Kita Sendiri */
+        /* Ikon Lingkaran */
         .tier-wrapper { display: flex; flex-direction: column; align-items: center; width: 48px; flex-shrink: 0; }
         .tier-abbr-box { 
             width: 42px; height: 42px; border-radius: 9999px; 
@@ -39,21 +36,28 @@
             margin-bottom: -11px; font-size: 13px; font-weight: 900;
         }
         .tier-box { 
-            width: 40px; height: 21px; border-radius: 4px; border: 1.5px solid;
+            width: 40px; height: 20px; border-radius: 4px; border: 1.5px solid;
             display: flex; align-items: center; justify-content: center;
             font-size: 10px; font-weight: 900; color: white; z-index: 10;
         }
 
+        /* Themes */
         .t1-theme .tier-abbr-box { border-color: #fbbf24; color: #fbbf24; } .t1-theme .tier-box { background: #d97706; border-color: #fbbf24; }
         .t2-theme .tier-abbr-box { border-color: #94a3b8; color: #94a3b8; } .t2-theme .tier-box { background: #475569; border-color: #94a3b8; }
         .t3-theme .tier-abbr-box { border-color: #f97316; color: #f97316; } .t3-theme .tier-box { background: #c2410c; border-color: #f97316; }
         .t4-theme .tier-abbr-box { border-color: #475569; color: #475569; } .t4-theme .tier-box { background: #1e293b; border-color: #475569; }
         .t5-theme .tier-abbr-box { border-color: #334155; color: #334155; } .t5-theme .tier-box { background: #0f172a; border-color: #334155; }
 
-        /* Profil Modal ala mctiers.com */
-        #profileModal { display: none; position: fixed; inset: 0; z-index: 100; backdrop-filter: blur(15px); align-items: center; justify-content: center; padding: 20px; background: rgba(0,0,0,0.85); }
-        .modal-box { background: #0f172a; border: 1px solid #1e293b; border-radius: 24px; animation: slideUp 0.3s ease-out; overflow: hidden; }
-        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        /* Modal Profil ala mctiers.com */
+        #profileModal { display: none; position: fixed; inset: 0; z-index: 100; backdrop-filter: blur(12px); align-items: center; justify-content: center; padding: 20px; background: rgba(0,0,0,0.85); }
+        .modal-box { background: #111827; border: 1px solid #1e293b; border-radius: 28px; animation: slideUp 0.3s ease-out; overflow: hidden; width: 100%; max-width: 380px; }
+        
+        .profile-pos-box {
+            background: #1f2937; border-radius: 12px; display: flex; align-items: center; overflow: hidden; border: 1px solid #374151;
+        }
+        .pos-num { background: #fbbf24; color: #000; padding: 10px 15px; font-weight: 900; font-style: italic; font-size: 20px; min-width: 60px; text-align: center; }
+
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -78,49 +82,35 @@
     </div>
 
     <div id="profileModal" onclick="closeProfile()">
-        <div class="modal-box w-full max-w-sm relative shadow-2xl" onclick="event.stopPropagation()">
+        <div class="modal-box relative shadow-2xl" onclick="event.stopPropagation()">
+            <button onclick="closeProfile()" class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center bg-gray-800/50 rounded-full text-white text-xl z-20 hover:bg-gray-700">✕</button>
+            
             <div id="modalBody"></div>
-            <div class="p-6 bg-[#0b1120]">
-                <button onclick="closeProfile()" class="w-full py-3 bg-gray-800 hover:bg-gray-700 rounded-xl text-xs font-bold uppercase tracking-widest text-gray-400 transition">Tutup Profil</button>
-            </div>
         </div>
     </div>
 
     <script>
         let currentFilter = 'overall';
+        const POINT_VALUES = { 'HT1': 65, 'LT1': 50, 'HT2': 40, 'LT2': 35, 'HT3': 20, 'LT3': 15, 'HT4': 10, 'LT4': 5, 'HT5': 3, 'LT5': 1 };
+        const abbreviations = { sword: "SW", crystal: "CR", mace: "ME", smp: "SM", diapot: "DP", nethpot: "NP", axe: "AX", uhc: "UHC" };
 
-        const POINT_VALUES = {
-            'HT1': 65, 'LT1': 50, 'HT2': 40, 'LT2': 35,
-            'HT3': 20, 'LT3': 15, 'HT4': 10, 'LT4': 5,
-            'HT5': 3, 'LT5': 1
-        };
-
-        const abbreviations = {
-            sword: "SW", crystal: "CR", mace: "ME", smp: "SM",
-            diapot: "DP", nethpot: "NP", axe: "AX", uhc: "UHC"
-        };
-
-        // DAFTAR PLAYER (Urutan akan otomatis di-sortir berdasarkan poin)
         const players = [
-            { id: 1, name: "X1an_", title: "Combat Grandmaster", region: "AS", pfp: "https://i.postimg.cc/fT79Sq90/custom-ava-(7).png", tiers: { sword: "HT3", crystal: "LT3", mace: "HT4", smp: "HT3", diapot: "HT4", nethpot: "HT4", axe: "LT3", uhc: "LT3" } },
-            { id: 2, name: "coldified", title: "Sword Legend", region: "EU", pfp: "https://i.pinimg.com/736x/21/f0/26/21f026364f89d38977c012879572797e.jpg", tiers: { sword: "HT2", smp: "HT1", mace: "LT1" } },
-            { id: 3, name: "Shadow", title: "Crystal Elite", region: "NA", pfp: "https://i.pravatar.cc/150?u=1", tiers: { nethpot: "HT3", crystal: "LT1", diapot: "LT2" } },
-            { id: 4, name: "Vortex", title: "Versatile Duelist", region: "SEA", pfp: "https://i.pravatar.cc/150?u=2", tiers: { sword: "HT3", axe: "HT4", smp: "LT2" } },
-            { id: 5, name: "Dante", title: "Mace Specialist", region: "EU", pfp: "https://i.pravatar.cc/150?u=3", tiers: { crystal: "HT2", mace: "LT2", uhc: "HT4" } },
-            { id: 6, name: "Nifty", title: "Survival Pro", region: "NA", pfp: "https://i.pravatar.cc/150?u=4", tiers: { smp: "HT3", uhc: "LT1", diapot: "HT4" } },
-            { id: 7, name: "Luv", title: "Rising Star", region: "SEA", pfp: "https://i.pravatar.cc/150?u=5", tiers: { sword: "LT1", nethpot: "HT4", axe: "LT2" } }
+            { id: 1, name: "X1an_", title: "Combat Grandmaster", region: "Asia", pfp: "https://i.postimg.cc/fT79Sq90/custom-ava-(7).png", tiers: { sword: "HT3", crystal: "LT3", mace: "HT4", smp: "HT3", diapot: "HT4", nethpot: "HT4", axe: "LT3", uhc: "LT3" } },
+            { id: 2, name: "coldified", title: "Sword Legend", region: "Europe", pfp: "https://i.pinimg.com/736x/21/f0/26/21f026364f89d38977c012879572797e.jpg", tiers: { sword: "HT2", smp: "HT1", mace: "LT1" } },
+            { id: 3, name: "Shadow", title: "Crystal Elite", region: "North America", pfp: "https://i.pravatar.cc/150?u=1", tiers: { nethpot: "HT3", crystal: "LT1", diapot: "LT2" } },
+            { id: 4, name: "Vortex", title: "Versatile Duelist", region: "South East Asia", pfp: "https://i.pravatar.cc/150?u=2", tiers: { sword: "HT3", axe: "HT4", smp: "LT2" } },
+            { id: 5, name: "Dante", title: "Mace Specialist", region: "Europe", pfp: "https://i.pravatar.cc/150?u=3", tiers: { crystal: "HT2", mace: "LT2", uhc: "HT4" } },
+            { id: 6, name: "Nifty", title: "Survival Pro", region: "North America", pfp: "https://i.pravatar.cc/150?u=4", tiers: { smp: "HT3", uhc: "LT1", diapot: "HT4" } },
+            { id: 7, name: "Luv", title: "Rising Star", region: "South East Asia", pfp: "https://i.pravatar.cc/150?u=5", tiers: { sword: "LT1", nethpot: "HT4", axe: "LT2" } }
         ];
 
-        function calculatePoints(tierList) {
-            return Object.values(tierList).reduce((acc, tier) => acc + (POINT_VALUES[tier] || 0), 0);
-        }
+        function calculatePoints(tierList) { return Object.values(tierList).reduce((acc, tier) => acc + (POINT_VALUES[tier] || 0), 0); }
 
-        function getTierIconHtml(mode, tier) {
+        function getTierIconHtml(mode, tier, isSmall = false) {
             const level = tier.replace(/\D/g, '');
-            const abbr = abbreviations[mode] || "??";
             return `
-            <div class="tier-wrapper t${level}-theme">
-                <div class="tier-abbr-box">${abbr}</div>
+            <div class="tier-wrapper t${level}-theme ${isSmall ? 'scale-90' : ''}">
+                <div class="tier-abbr-box">${abbreviations[mode]}</div>
                 <div class="tier-box">${tier}</div>
             </div>`;
         }
@@ -128,34 +118,30 @@
         function renderList() {
             const container = document.getElementById('playerContainer');
             container.innerHTML = '';
-            
             players.forEach(p => p.computedPts = calculatePoints(p.tiers));
             players.sort((a, b) => b.computedPts - a.computedPts);
 
             players.forEach((p, index) => {
                 const rank = index + 1;
                 const rankClass = rank <= 3 ? `rank-${rank}` : 'rank-other';
-                
-                let tiersHtml = '';
-                if (currentFilter === 'overall') {
-                    tiersHtml = Object.entries(p.tiers).map(([mode, tier]) => getTierIconHtml(mode, tier)).join('');
-                } else if (p.tiers[currentFilter]) {
-                    tiersHtml = getTierIconHtml(currentFilter, p.tiers[currentFilter]);
-                } else { return; }
+                let tiersHtml = (currentFilter === 'overall') 
+                    ? Object.entries(p.tiers).map(([m, t]) => getTierIconHtml(m, t)).join('')
+                    : (p.tiers[currentFilter] ? getTierIconHtml(currentFilter, p.tiers[currentFilter]) : '');
+
+                if (!tiersHtml) return;
 
                 const card = document.createElement('div');
                 card.className = 'mctiers-card';
-                card.onclick = () => openProfile(p.id);
+                card.onclick = () => openProfile(p.id, rank);
                 card.innerHTML = `
                     <div class="flex items-center">
                         <div class="rank-slant ${rankClass}"><span class="text-xl font-heavy">${rank}.</span></div>
-                        <img src="${p.pfp}" class="w-12 h-12 rounded-full border-2 border-[#0b1120] object-cover -ml-4 z-10" onerror="this.src='https://i.imgur.com/8pw9fS0.png'">
+                        <img src="${p.pfp}" class="w-12 h-12 rounded-full border-2 border-[#0b1120] object-cover -ml-4 z-10">
                         <div class="ml-4 flex-1 pr-3">
                             <div class="flex justify-between items-center mb-0.5">
-                                <h3 class="player-name text-lg leading-tight truncate w-32">${p.name}</h3>
+                                <h3 class="font-extrabold text-lg leading-tight truncate w-32">${p.name}</h3>
                                 <div class="flex gap-2 items-center">
                                     <span class="text-[10px] font-black text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">${p.computedPts} PTS</span>
-                                    <span class="bg-red-900/20 text-red-500 text-[9px] font-black px-2 py-0.5 rounded uppercase">${p.region}</span>
                                 </div>
                             </div>
                             <p class="text-[10px] text-yellow-500 font-bold italic">◆ ${p.title}</p>
@@ -174,42 +160,51 @@
             renderList();
         }
 
-        function openProfile(id) {
+        function openProfile(id, rank) {
             const p = players.find(x => x.id === id);
             const modalBody = document.getElementById('modalBody');
-            const tiersDetail = Object.entries(p.tiers).map(([mode, tier]) => {
-                const level = tier.replace(/\D/g, '');
-                return `<div class="bg-white/5 p-3 rounded-xl flex flex-col items-center border border-white/5 t${level}-theme">
-                    <div class="tier-abbr-box scale-75 mb-[-5px]">${abbreviations[mode]}</div>
-                    <span class="text-[10px] font-heavy text-white">${tier}</span>
-                    <span class="text-[8px] text-gray-500 font-black uppercase tracking-widest mt-1">${mode}</span>
-                </div>`;
-            }).join('');
+            const tiersDetail = Object.entries(p.tiers).map(([mode, tier]) => getTierIconHtml(mode, tier, true)).join('');
 
             modalBody.innerHTML = `
-                <div class="bg-gradient-to-b from-blue-900/20 to-[#0f172a] p-8 text-center border-b border-gray-800">
-                    <img src="${p.pfp}" class="w-24 h-24 rounded-full mx-auto border-4 border-blue-500 shadow-2xl object-cover mb-4">
-                    <h2 class="player-name text-3xl italic mb-1">${p.name}</h2>
-                    <p class="text-yellow-500 font-bold italic text-sm">◆ ${p.title} ◆</p>
-                </div>
-                <div class="p-6">
-                    <div class="mb-6">
-                        <p class="text-[9px] font-black text-gray-500 mb-3 uppercase tracking-[0.2em]">STATISTIK LEADERBOARD</p>
-                        <div class="bg-blue-500/5 border border-blue-500/20 p-4 rounded-2xl flex justify-between items-center">
-                            <span class="text-xs font-semibold text-gray-300">Total Competitive Score</span>
-                            <span class="text-2xl font-black text-blue-400">${p.computedPts}</span>
+                <div class="p-8 text-center bg-gradient-to-b from-gray-800/20 to-transparent">
+                    <div class="relative inline-block mb-4">
+                        <img src="${p.pfp}" class="w-28 h-28 rounded-full border-4 border-yellow-500/50 object-cover shadow-2xl">
+                    </div>
+                    <h2 class="text-4xl font-extrabold tracking-tight mb-2">${p.name}</h2>
+                    <div class="inline-flex items-center bg-yellow-500/10 border border-yellow-500/30 px-4 py-1.5 rounded-full mb-2">
+                        <span class="text-yellow-500 text-xs font-black italic uppercase tracking-wider">✦ ${p.title}</span>
+                    </div>
+                    <p class="text-gray-500 text-sm font-bold block mb-6">${p.region}</p>
+
+                    <div class="text-left mb-8">
+                        <p class="text-[10px] font-black text-gray-500 mb-3 uppercase tracking-widest ml-1">POSITION</p>
+                        <div class="profile-pos-box">
+                            <div class="pos-num">${rank}.</div>
+                            <div class="flex-1 px-4 flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xl">🏆</span>
+                                    <span class="font-black text-sm uppercase italic">Overall</span>
+                                </div>
+                                <span class="text-gray-400 text-xs font-bold">(${p.computedPts} points)</span>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <p class="text-[9px] font-black text-gray-500 mb-3 uppercase tracking-[0.2em]">GAMEMODE TIERS</p>
-                        <div class="grid grid-cols-4 gap-3">${tiersDetail}</div>
+
+                    <div class="text-left">
+                        <p class="text-[10px] font-black text-gray-500 mb-4 uppercase tracking-widest ml-1">TIERS</p>
+                        <div class="flex gap-4 overflow-x-auto no-scrollbar pb-2 px-1">
+                            ${tiersDetail}
+                        </div>
                     </div>
-                </div>`;
+                </div>
+                <div class="p-6 pt-0">
+                    <button onclick="closeProfile()" class="w-full py-4 bg-gray-800 hover:bg-gray-700 rounded-2xl text-xs font-black uppercase tracking-[0.2em] text-gray-400 transition-all">Close Profile</button>
+                </div>
+            `;
             document.getElementById('profileModal').style.display = 'flex';
         }
 
         function closeProfile() { document.getElementById('profileModal').style.display = 'none'; }
-
         renderList();
     </script>
 </body>
