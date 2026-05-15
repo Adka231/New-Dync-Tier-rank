@@ -27,8 +27,8 @@
 
         .mctiers-card { background: #151c2e; border-radius: 12px; margin-bottom: 12px; border: 1px solid #1e293b; overflow: hidden; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
 
-        /* Ikon Lingkaran */
-        .tier-wrapper { display: flex; flex-direction: column; align-items: center; width: 48px; flex-shrink: 0; }
+        /* Ikon Lingkaran Kita Sendiri */
+        .tier-wrapper { display: flex; flex-direction: column; align-items: center; width: 55px; flex-shrink: 0; }
         .tier-abbr-box { 
             width: 42px; height: 42px; border-radius: 9999px; 
             background: #0f172a; border: 2.5px solid; 
@@ -92,26 +92,36 @@
     <script>
         let currentFilter = 'overall';
         const POINT_VALUES = { 'HT1': 65, 'LT1': 50, 'HT2': 40, 'LT2': 35, 'HT3': 20, 'LT3': 15, 'HT4': 10, 'LT4': 5, 'HT5': 3, 'LT5': 1 };
-        const abbreviations = { sword: "SW", crystal: "CR", mace: "ME", smp: "SM", diapot: "DP", nethpot: "NP", axe: "AX", uhc: "UHC" };
+        
+        // Singkatan dan Nama Lengkap Gamemode
+        const abbreviations = { 
+            sword: "SW", crystal: "CR", mace: "ME", smp: "SM", 
+            diapot: "DP", nethpot: "NP", axe: "AX", uhc: "UHC" 
+        };
+        const fullNames = {
+            sword: "Sword", crystal: "Crystal", mace: "Mace", smp: "SMP",
+            diapot: "Diapot", nethpot: "Nethpot", axe: "Axe", uhc: "UHC"
+        };
 
         const players = [
-            { id: 1, name: "X1an_", title: "Combat Grandmaster", region: "Asia", pfp: "https://i.postimg.cc/zfhd3dML/custom-ava-(6).png", tiers: { sword: "HT3", crystal: "LT3", mace: "HT4", smp: "HT3", diapot: "HT4", nethpot: "HT4", axe: "LT3", uhc: "LT3" } },
-            { id: 2, name: "ugood", title: "Average Pros", region: "Asia", pfp: "https://i.postimg.cc/02qqHcHW/custom-ava-(10).png", tiers: { sword: "HT3", smp: "HT4", mace: "LT3" } },
-            { id: 3, name: "owllyarv", title: "Smp Player", region: "Asia", pfp: "https://i.postimg.cc/fT79Sq90/custom-ava-(7).png", tiers: { mace: "LT4", sword: "HT5" } },
-            { id: 4, name: "aozora", title: "Combat cadet", region: "Asia", pfp: "https://i.postimg.cc/mrnwppVs/custom-ava-(8).png", tiers: { sword: "LT4" } },
-            { id: 5, name: "Nelllwkwkwk", title: "Top 1 wannabe", region: "Asia", pfp: "https://i.postimg.cc/bJzzMLv1/custom-ava-(9).png", tiers: { sword: "HT5", uhc: "LT5" } },
-            { id: 6, name: "None", title: "Survival Pro", region: "North America", pfp: "link", tiers: { smp: "LT5" } },
-            { id: 7, name: "None", title: "Rising Star", region: "South East Asia", pfp: "link", tiers: { sword: "LT5" } }
+            { id: 1, name: "X1an_", title: "Combat Grandmaster", region: "Asia", pfp: "https://i.postimg.cc/fT79Sq90/custom-ava-(7).png", tiers: { sword: "HT3", crystal: "LT3", mace: "HT4", smp: "HT3", diapot: "HT4", nethpot: "HT4", axe: "LT3", uhc: "LT3" } },
+            { id: 2, name: "coldified", title: "Sword Legend", region: "Europe", pfp: "https://i.pinimg.com/736x/21/f0/26/21f026364f89d38977c012879572797e.jpg", tiers: { sword: "HT2", smp: "HT1", mace: "LT1" } },
+            { id: 3, name: "Shadow", title: "Crystal Elite", region: "North America", pfp: "https://i.pravatar.cc/150?u=1", tiers: { nethpot: "HT3", crystal: "LT1", diapot: "LT2" } },
+            { id: 4, name: "Vortex", title: "Versatile Duelist", region: "South East Asia", pfp: "https://i.pravatar.cc/150?u=2", tiers: { sword: "HT3", axe: "HT4", smp: "LT2" } },
+            { id: 5, name: "Dante", title: "Mace Specialist", region: "Europe", pfp: "https://i.pravatar.cc/150?u=3", tiers: { crystal: "HT2", mace: "LT2", uhc: "HT4" } },
+            { id: 6, name: "Nifty", title: "Survival Pro", region: "North America", pfp: "https://i.pravatar.cc/150?u=4", tiers: { smp: "HT3", uhc: "LT1", diapot: "HT4" } },
+            { id: 7, name: "Luv", title: "Rising Star", region: "South East Asia", pfp: "https://i.pravatar.cc/150?u=5", tiers: { sword: "LT1", nethpot: "HT4", axe: "LT2" } }
         ];
 
         function calculatePoints(tierList) { return Object.values(tierList).reduce((acc, tier) => acc + (POINT_VALUES[tier] || 0), 0); }
 
-        function getTierIconHtml(mode, tier, isSmall = false) {
+        function getTierIconHtml(mode, tier, isProfile = false) {
             const level = tier.replace(/\D/g, '');
             return `
-            <div class="tier-wrapper t${level}-theme ${isSmall ? 'scale-90' : ''}">
+            <div class="tier-wrapper t${level}-theme">
                 <div class="tier-abbr-box">${abbreviations[mode]}</div>
                 <div class="tier-box">${tier}</div>
+                ${isProfile ? `<span class="text-[8px] text-gray-500 font-bold uppercase mt-1 tracking-tighter">${fullNames[mode]}</span>` : ''}
             </div>`;
         }
 
